@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>CORS lab</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script>
+        function do_request(){
+            $.ajax({
+                url: 'http://vaportrail.nss.cs.ubc.ca:8080/cors.php',
+                type: 'GET',
+                xhrFields: {withCredentials: true},
+                complete: function(xhr, status){ handle_response(null, status, xhr); },
+                success: handle_response
+            })
+        }
+        
+        function handle_response(data, status, xhr){
+                $('#output').html('<br />STATUS: '+ xhr.statusText);
+            
+        }
+        
+    </script>
+</head>
+<body>
+    <input type="button" value="Do Request" onclick="do_request()" /><br />
+    <div id="output">
+
+    </div>
+    
+    <iframe name="foo" id="foo" src="cors-sub.html" width="200" height="200"></iframe>
+</body>
+</html>

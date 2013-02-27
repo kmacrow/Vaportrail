@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Vaportrail: Discover your exhaust data </title>
+		
+		<script type="text/javascript" src="ifsjs/ext-js/util.js"></script>
+		<script type="text/javascript" src="ifsjs/ifsjs.nocache.js"></script>
+		
+		<script type="text/javascript" src="jquery/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/vaportrail.util.js"></script>
+		<script type="text/javascript" src="js/vaportrail.feedback.js"></script>
+		<script type="text/javascript" src="js/vaportrail.landing.js"></script>
+		
+		
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/vaportrail.css" />	
+	
+	</head>
+	<body>
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#">Vaportrail</a>
+					<div class="nav-collapse">
+						<ul class="nav">
+							<li><a href="/about">About</a></li>
+							<li><a href="#feedback_modal" data-toggle="modal">Feedback</a></li>
+							<li><a href="/compat/">Help</a></li>
+						</ul>
+						<ul class="nav pull-right">
+						    <li>
+						        <p class="navbar-text" style="cursor:default">
+						            <img id="connected_icon" style="display:none" src="images/graph-connected.png" align="absmiddle" />
+							        <span id="connected_msg" style="display:none" rel="tooltip"  
+								        data-offsety="10"
+								        title="Vaportrail is now connected to your personal storage provider" 
+								        data-placement="bottom"></span>
+						        </p>
+						    </li>
+						    <li class="divider-vertical"></li>
+						    <li>
+						        <p class="navbar-text">
+						            <input type="image" id="logout_icon" src="images/system-log-out.png" rel="tooltip"
+						                style="display:none" 
+						                title="Logout" 
+						                data-placement="bottom" 
+						                data-offsety="5"
+						                onclick="do_logout()" />
+						        </p>
+						    </li>
+						</ul>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="alert alert-block alert-info" id="release_note" style="position:absolute;width:925px;top:60px;display:none">
+		    <a class="close" data-dismiss="alert" onclick="dismiss_release_notice()">×</a>
+		    <strong>Hi there,</strong>
+		    welcome to our first release! We would appreciate any feedback or questions you might have, and your patience
+		    as any problems are fixed. Enjoy!  
+    		</div>
+		
+		<div class="container copy-container">
+			<div class="row">
+				<div class="span5 offset1">
+				
+					<h1 class="brand">Vaportrail</h1>
+					<h3 style="color:#3B3B3B">Discover your exhaust data.</h3>
+					
+					<br />
+					<p>
+						Vaportrail is built on the philosophy that you should own your data, and be able to use it however you like.
+					</p>	
+					<br /><br />
+					<i class="icon-folder-open"></i> <span class="big">Backup</span>
+					<p class="shift">
+						Quickly backup and encrypt your data from Gmail, Facebook, Twitter, and other services.
+					</p>
+					
+					<br />
+					<i class="icon-search"></i> <span class="big">Search</span>
+					<p class="shift">
+						Search your mail, posts, tweets and calendars from one simple, powerful timeline interface.
+					</p>
+					
+					<br />
+					<i class="icon-leaf"></i> <span class="big">Discover</span>
+					<p class="shift">
+						Discover fun and useful correlations between your exhaust data from 
+						different services.
+					</p>
+					<br />
+					<p class="shift rule">
+						<strong>We take privacy very seriously.</strong> Vaportrail only uses decentralized 
+						personal storage, 256-bit SSL, and encrypts all of your data for safe keeping.  
+						<br /><br />
+						
+						<a href="/about">About Vaportrail</a>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="/compat">Browser compatability</a>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="#" onclick="get_account()">Get an Account &raquo;</a>
+					</p>
+					
+				</div>
+				
+				<div class="span5">
+					<div id="trans_panel">
+						<div id="loading" class="ttab">
+							<br /><br />
+							<div id="loading-badge">
+							<img src="images/spinner.gif" align="absmiddle" />&nbsp;<small>Loading...</small>
+							</div>
+						</div>
+						<div id="request_invite" class="ttab">
+							<br /><br />
+							
+							<a href="#request_invite_modal" data-toggle="modal" class="btn btn-primary btn-large">Request an Invitation!</a><br />
+							<div style="margin-top:5px"><small>&mdash; Try the first release &mdash;</small></div><br /><br />
+							
+							<a href="#" onclick="show_ifs_auth()">Already have an account?</a>
+							
+						</div>
+						<div id="create_account" class="ttab">
+							
+							<br /><br />
+							
+							<a href="#" class="btn btn-primary btn-large" onclick="get_account()">Create an Account</a><br />
+							<div style="margin-top:5px">&mdash; It only takes a minute &mdash;</div><br /><br />
+							
+							<a href="#" onclick="get_account()">Already have an account?</a>
+							
+						</div>
+						<div id="new_account" class="ttab">
+							
+							<table style="margin:0 auto" cellpadding="5">
+								<tr>
+									<td valign="middle">
+										<div id="new_profile_pic" rel="tooltip" ondragenter="return check_profile_drag(event);" 
+														ondragover="return check_profile_drag(event)" 
+														ondrop="do_profile_drop(event)"
+														data-placement="top"
+														title="Drag & Drop a display picture here...">
+											<img src="images/emblem-personal.png?" />
+										</div>
+									</td>
+									<td align="left">
+									    <h1><small>Create your account</small></h1>
+									    <div class="control-group" id="new_profile_name_cg">
+										    <input type="text" id="new_profile_name" placeholder="Full Name" />
+										</div>    
+										
+									</td>
+								</tr>
+								
+								<tr>
+									<td></td>
+									<td>
+										<br />
+										<div class="control-group" id="new_vpt_password_cg">
+										    <input type="password" id="new_vpt_password" placeholder="Password" /><br />
+										    <input type="password" id="new_vpt_password2" placeholder="Repeat Password" />
+										</div>
+										<div align="center">
+											<br />
+											&nbsp;<a href="#" class="btn btn-primary" onclick="do_new_account()">Save and Continue &raquo;</a>
+										</div>
+									</td>
+								</tr>
+							</table>
+							
+						</div>
+						<div id="ifs_auth" class="ttab">
+							
+							<form class="form-inline">
+							    
+								<table style="margin:0 auto">
+								    <tr>
+								        <td cospan="2" align="left">
+								               <h1><small>Personal storage login</small></h1>
+								        </td>
+								    </tr>
+									<tr>
+									<td><select id="ifs_providers" style="outline:0" rel="tooltip" data-placement="bottom" 
+									        title="This is where Vaportrail will store your data &mdash; please login to continue">
+									     </select></td>
+									<td>&nbsp;<a href="#" class="btn btn-primary" onclick="do_ifs_auth()">Login</a>
+									&nbsp;
+									<a href="#add_ifs_modal" rel="tooltip" title="Add your storage provider" data-toggle="modal">
+										<i class="icon-plus"></i>
+									</a>
+									</td>
+									</tr>
+									<tr>
+									<td align="left">
+									   
+									</td>
+									<td></td>
+									</tr>
+								</table>
+							</form>
+							<br /><br />
+							<strong>or</strong><br /><br />
+							<a href="#" onclick="vpt_provider_goauth('vaportrail.nss.cs.ubc.ca:8080')">
+								Sign up for personal storage <img src="images/download.png" border="0" /></a><br />
+							<!--<small>from vaportrail.nss.cs.ubc.ca</small>-->
+							
+							
+						</div>
+						<div id="vpt_auth" class="ttab" align="center">
+							<table style="margin:0 auto" cellpadding="5">
+								<tr>
+									<td>
+										<img class="profile-pic" id="profile_pic" src="images/profile-photo.jpg" style="width:64px;height:64px;" />
+									</td>
+									<td align="left">
+										<span class="big" id="profile_name"></span><br />
+										<small id="connected_ifs"></small>
+										<a class="close" onclick="do_logout()">&times;</a>
+									</td>
+								</tr>
+								
+								<tr>
+									<td></td>
+									<td>
+									    <div class="control-group" id="vpt_password_cg">
+										    <input type="password" id="vpt_password" placeholder="Password" /><br />
+										</div>
+										<div align="right">
+											<a href="#forgot_pwd_modal" data-toggle="modal">Lost your password?</a>
+											&nbsp;<a href="#" class="btn btn-primary" onclick="do_vpt_auth()">Login</a>
+										</div>
+									</td>
+								</tr>
+							</table>
+							
+							
+							
+						</div>		
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div id="branding">
+			<div class="container">
+				<div class="row">
+					<div class="offset1">
+						<table>
+							<tr>
+							<td valign="middle">						
+								<img id="ubc_brand" src="images/ubcgrey_basic.png" />
+							</td>
+							<td valign="middle">
+								<a href="http://www.cs.ubc.ca/labs/nss/">NSS Lab</a><br />
+								The University of British Columbia	
+							</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="footer">
+			<div id="footer1">
+				<div id="container">
+				
+				</div>
+			</div>
+			<div id="footer2">
+				<div id="container">
+				
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="request_invite_modal">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Request an Invitation!</h3>
+			</div>
+			<div class="alert alert-success" id="request_invite_alert" style="display:none">
+					<strong>Thanks!</strong> You should recieve an invitation within the next day.
+			</div>
+			<div class="modal-body">
+				<br />
+				<center>
+				<p>
+					Enter your email* and we'll send you an invitation to try out <span class="brand">Vaportrail</span>
+				
+				</p>
+				
+				<br />
+				
+				<form class="form-inline">
+					<div class="control-group" id="request_invite_form">
+						<input type="text" id="email" placeholder="me@example.com" />
+						<a href="#" id="invite_btn" class="btn btn-primary" data-loading-text="Submit" onclick="request_invite()">Submit</a>
+					</div>
+					
+				</form>
+				</center>
+		
+			</div>
+			<div class="modal-footer">
+				<table width="100%">
+					<tr>
+						<td>
+							<small>* Don't worry, we won't send you anything unrelated to this.</small>
+						</td>
+						<td align="right">
+							<a href="#" id="dismiss_request_invite" data-dismiss="modal">Cancel</a>		
+						</td>
+					</tr>
+				</table>		
+			</div>
+		</div>
+		
+		<div class="modal fade" id="add_ifs_modal">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Add Storage Provider</h3>
+			</div>
+			<div class="modal-body" align="center">
+				<br />
+				<form class="form-inline">
+					<input type="text" id="ifs_hostname" placeholder="storage.example.com" />
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" onclick="add_ifs_provider()">Continue</a>
+				<a href="#" data-dismiss="modal" class="btn">Cancel</a>
+				
+			</div>
+		</div>
+		
+		<div class="modal fade" id="forgot_pwd_modal">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Forgotten Passwords</h3>
+			</div>
+			<div class="modal-body">
+				<p>
+					<strong>Forgotten passwords cannot be recovered.</strong> Vaportrail does
+					not store your password anywhere. Furthermore, all of your data is encrypted
+					under this password. Without it, your data cannot be read by anyone, including
+					Vaportrail. 
+				</p>
+				<div align="center">
+					<br />
+					<a class="btn btn-large btn-danger">Reset My Account</a>
+					<div style="margin-top:5px">&mdash;All of your data will be lost&mdash;</div>
+				</div>
+				
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn">Close</a>
+				
+			</div>
+		</div>
+		
+		<div class="modal fade" id="feedback_modal">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Send Feedback</h3>
+			</div>
+			<div class="alert alert-success" id="feedback_alert" style="display:none">
+					<strong>Thanks!</strong> We appreciate you taking the time to share your thoughts.
+			</div>
+			<div class="modal-body" align="center">
+				We'd love to hear about your experience with <span class="brand">Vaportrail</span>!
+				<br /><br />
+				<form>
+					<input type="text" id="feedback_email" placeholder="me@example.com (Optional)" /><br />
+					<div class="control-group" id="feedback_form">
+					<textarea id="feedback_text"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a href="#" id="feedback_btn" class="btn btn-primary" data-loading-text="Submit" onclick="send_feedback()">Submit</a>
+				<a href="#" data-dismiss="modal" class="btn">Cancel</a>
+				
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+		<script type="text/javascript" src="sjcl/sjcl.js"></script>
+	</body>
+</html>

@@ -1,0 +1,39 @@
+Thank you for your interest in Vaportrail!
+
+The application is currently in a pre-release phase so we're monitoring account
+creation to ensure the system is running smoothly. 
+
+Please allow a few hours to recieve your invitation to create a new account. Once
+you do receive an invite, we would really appreciate any feedback on your
+experience with Vaportrail (which you can provide through the application.)
+
+In the meantime, you might want to create a personal storage account with one
+of the following services:
+
+Vaporcaps: http://vaportrail.nss.cs.ubc.ca:8080/
+
+- or -
+
+NSS Caps: http://caps.nss.cs.ubc.ca/
+
+You'll need a storage account to start playing with Vaportrail.
+
+You might also want to check out http://vaportrail.nss.cs.ubc.ca/about to
+learn a little more about Vaportrail and the philosophy behind it.
+
+If you have questions or concerns, please contact 
+Kalan MacRow <kalanwm@cs.ubc.ca>. 
+
+Sincerely,
+
+The Vaportrail Team
+
+---
+
+Vaportrail is a project of the Networks, Systems and Security (NSS) Lab in the 
+Department of Computer Science at the University of British Columbia.
+
+http://vaportrail.nss.cs.ubc.ca
+http://cs.ubc.ca/labs/nss
+
+

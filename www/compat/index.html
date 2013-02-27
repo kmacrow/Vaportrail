@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Vaportrail: Help </title>
+		
+		<script type="text/javascript" src="../js/deployJava.js"></script>
+		<script type="text/javascript" src="../jquery/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="../js/vaportrail.util.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/vaportrail.css" />
+		
+		
+		<script type="text/javascript">
+			$(document).ready(function(){
+				if(vpt_is_notebook()){
+					small_display();
+				}
+				
+				var jres = deployJava.getJREs();
+				
+				if(jres.length){
+				    $('#java_alert').removeClass('alert-error').addClass('alert-success')
+				    $('#java_heading').html('Java&trade; Plugin Detected ('+jres[0]+')');
+				    $('#java_msg').html('Awesome, it looks like you have the next generation Java&trade; Plugin installed!')    
+				}else{
+				    var isLinux = navigator.userAgent.toLowerCase().indexOf('linux') != -1;
+				    if(isLinux){
+				        $('#java_linux_btns').show();
+				    }else{
+				        $('#java_win_btn').show();
+				    }
+				}
+				
+			})
+			
+			function get_java_linux(arch){
+			    $('#java_dl').attr('href', 'install_java_linux'+ arch + '.sh');
+			    $('#java_linux_modal').modal('show');
+			}
+			
+			function get_java_win32(){
+			    location.href = 'http://www.java.com/getjava/';
+			}
+			
+		</script>
+		
+		<style type="text/css">
+			.grey{
+				color: #555;
+			}
+			
+		</style>
+		
+	</head>
+	
+	<body>
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="/">Vaportrail</a>
+					<div class="nav-collapse">
+						<ul class="nav">
+							<li><a href="/about">About</a></li>
+							<li class="active"><a href="/compat">Help</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="java_linux_modal" class="modal fade">
+		    <div class="modal-header">
+		        <a class="close" data-dismiss="modal">×</a>
+		        <h3>Install Java&trade;</h3>
+	        </div>
+	        <div class="modal-body">
+	            <div align="center">
+	                <a href="http://www.java.com/en/download/linux_manual.jsp">Manual Installation</a> or 
+	                <a id="java_dl" class="btn" target="_blank" href="">Download Install Script (1KB)</a> 
+	            </div>
+	            <br />
+	            <p>
+	                <strong>Automatic Installation</strong><br />
+	                <ol>
+	                    <li>Download the install script</li>
+	                    <li>Make the script executable <code>chmod +x install_java_linux&lt;arch&gt;.sh</code></li>
+	                    <li>Run the script <code>./install_java_linux&lt;arch&gt;.sh</code></li>
+	                    <li>Restart your browser</li>
+	                </ol>
+	            </p>
+	        </div>
+	        <div class="modal-footer">
+	            <a href="#" data-dismiss="modal" class="btn">Finished</a>
+	        </div>
+		</div>
+		
+		<div class="container copy-container">
+			<div class="row">
+				<div class="span9 offset1">
+					<h1><span class="brand">Vaportrail</span> Help</h1>
+				
+					<br />
+					<img src="../images/HTML5_1Color_Black.png" style="height:48px;" align="absmiddle" />
+					<span class="big">
+					Vaportrail requires an up-to-date HTML5 web browser with JavaScript, Java&trade; and cookies enabled   
+					</span>
+					<br /><br /><br />
+					<div class="row">
+						<div class="span9">
+					
+						
+							<div id="java_alert" class="alert alert-block alert-error">
+							    <h4 class="alert-heading" id="java_heading">No Java&trade; Runtime Detected</h4>
+							    <p id="java_msg">
+							        It looks like you don't have the next generation Java&trade; Plugin, please install it:
+							    </p><br />
+							    <div id="java_linux_btns" style="display:none">
+							        <p>
+							        <!--<div class="btn" onclick="get_java_linux(32)">Linux (32-bit)</div>&nbsp;&nbsp;-->
+							        <div class="btn" onclick="get_java_linux(64)">Linux (64-bit)</div>
+							        </p>
+							    </div>
+							    <div id="java_win_btn" style="display:none">
+							        <p>
+							            <div class="btn" onclick="get_java_win32()">Windows Installer</div>
+							        </p>
+							    </div>
+							</div>
+				
+							
+							
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+			
+		</div>
+		
+		
+		<div id="branding">
+			<div class="container">
+				<div class="row">
+					<div class="offset1">
+						<table>
+							<tr>
+							<td valign="middle">						
+								<img id="ubc_brand" src="../images/ubcgrey_basic.png" />
+							</td>
+							<td valign="middle">
+								<a href="http://www.cs.ubc.ca/labs/nss/">NSS Lab</a><br />
+								The University of British Columbia	
+							</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="footer">
+			<div id="footer1">
+				<div id="container">
+				
+				</div>
+			</div>
+			<div id="footer2">
+				<div id="container">
+				
+				</div>
+			</div>
+		</div>
+	
+		<script src="../bootstrap/js/bootstrap.min.js"></script>
+	
+	
+	</body>
+</html>

@@ -1,0 +1,8 @@
+# Redirect Safari Mobile
+RewriteEngine On
+
+#RewriteCond %{HTTP_USER_AGENT} .*mobile.*safari [NC]
+#RewriteRule ^/?index.html$ /m.index.html [R,L] 
+
+RewriteRule app/ timeline.php [L]
+

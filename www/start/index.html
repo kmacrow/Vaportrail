@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Vaportrail: Discover your exhaust data </title>
+		
+		<script type="text/javascript" src="../jquery/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="../js/vaportrail.util.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/vaportrail.css" />
+		
+		<script type="text/javascript">
+		
+			function populate_providers(){
+				var p = vpt_get_providers();
+				var e = document.getElementById('providers');
+				
+				function add_button(p, auth){
+					var html = '<a href="redirect_provider(\''+p+'\')" class="btn btn-large ';
+					if(auth){
+						html += 'btn-success"><i class="icon-ok"></i>&nbsp; ';
+					}else{
+						html += 'btn-primary">';
+					}
+					html += vpt_provider_nicename(p) + '</a>&nbsp;&nbsp;';
+					e.innerHTML += html;
+				}
+				
+				$.each(p, function(i, pi){
+					vpt_logged_in(pi, {
+						success: function(){
+							add_button(pi, true);
+						},
+						error: function(){
+							add_button(pi, false);
+						}
+					})
+				})
+				
+			}
+			
+			function add_redirect_provider(){
+				var p = $('#provider_hostname').val();
+				vpt_add_provider(p);
+				redirect_provider(p);
+			}
+			
+			function redirect_provider(p){
+				vpt_provider_auth(p);
+			}
+		
+			$(document).ready(function(){
+			
+				// crunch for notebooks, etc
+				if(vpt_is_notebook()){
+					small_display();
+				}
+				
+				vpt_prime_providers();
+				populate_providers();
+			})
+		</script>
+
+
+	</head>
+	
+	<body>
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="/">Vaportrail</a>
+					<div class="nav-collapse">
+						<ul class="nav">
+							<li class="active"><a href="#">Create an Account</a></li>
+							<li><a href="/about">About</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container copy-container">
+			<div class="row">
+				<div class="span8 offset1">
+					<h1>Create an Account</h1>
+					<br />
+					<span class="big">
+						Welcome to Vaportrail&mdash;this guide will walk you through setting up your storage
+						provider and configuring your new account.
+					</span>
+					<br /><br />
+					<h2>Storage</h2>
+					<p>	
+						Vaportrail does not use a central database to store your data. Instead, it uses a third-party storage provider
+						that you specify. Select one of the following providers to get a storage account, or to sign in if you already have one. 
+						 
+					</p>	
+					<br />
+					<div align="center" id="providers"></div>
+					<br />
+					<div align="center">
+						<a href="#add_provider_modal" data-toggle="modal">Already have a storage provider?</a>
+					</div>
+					
+					<!--
+					<h2>Configure</h2>
+					<p>
+						Tell us a bit about yourself&mdash;provide a name and optional profile picture to appear on your dashboard. Also,
+						you will need a strong password. <strong>It is crucial that you keep your password somewhere safe.</strong> Without
+						it, your data cannot be recovered.
+						
+					</p>
+					<br />
+					<div align="center">
+						
+						<div id="drop_pad">
+							Drag & Drop<br />
+							a Profile Picture
+						</div>
+					
+						<br />
+						<form class="form-inline">
+							<input type="text" id="name" placeholder="Your name" /> <span style="color:#aaa">eg. Jane Smith</span><br /><br />
+							<input type="password" id="pwd1" placeholder="Password" style="width:180px" />
+							<input type="password" id="pwd2" placeholder="Confirm password" style="width:180px" />
+							<a href="#" class="btn">Sign Up &raquo;</a>
+							
+						</form>
+					
+					
+					</div>
+					-->
+				</div>
+			</div>
+		</div>
+		
+		<div id="branding">
+			<div class="container">
+				<div class="row">
+					<div class="offset1">
+						<table>
+							<tr>
+							<td valign="middle">						
+								<img id="ubc_brand" src="../images/ubcgrey_basic.png" />
+							</td>
+							<td valign="middle">
+								<a href="http://www.cs.ubc.ca/labs/nss/">NSS Lab</a><br />
+								The University of British Columbia	
+							</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div id="footer">
+			<div id="footer1">
+				<div id="container">
+				
+				</div>
+			</div>
+			<div id="footer2">
+				<div id="container">
+				
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="modal fade" id="add_provider_modal">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Add Storage Provider</h3>
+			</div>
+			<div class="modal-body" align="center">
+				<br />
+				
+				<form class="form-inline">
+					<input type="text" id="provider_hostname" placeholder="Provider Hostname" />
+					<span style="color:#aaa">eg. store.example.io</span>
+				</form>
+				
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" onclick="add_redirect_provider()">Save</a>
+				<a href="#" data-dismiss="modal" class="btn">Cancel</a>
+				
+			</div>
+		</div>
+		
+		<script src="../bootstrap/js/bootstrap.min.js"></script>
+	
+	</body>
+</html>

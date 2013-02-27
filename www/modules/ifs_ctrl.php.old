@@ -1,0 +1,50 @@
+<?php
+require_once("../utils.inc.php");
+require_once("../vars.inc.php");
+
+session_start();
+util_ensure_method("POST");
+util_ensure_logged_in();
+
+$usercap = $_SESSION['ifsuser'];
+$userid = $_SESSION['ifsuserid'];
+
+$descriptorspec = array(
+  0 => array("file", "/dev/null", "r"),
+  1 => array("pipe", "w"),
+  2 => array("pipe", "w")
+);
+$env = array(
+     "IFSRC" => "$IFSRC_PATH",
+     "PYTHONPATH" => "$IFS_PYTHONPATH",
+);
+$cwd = NULL;
+$cmd = "$IFS_PYTHON -m userls " . escapeshellarg($userid);
+$process = proc_open($cmd, $descriptorspec, $pipes, $cwd, $env);
+
+if (!is_resource($process)) {
+   exit("E_NO_LUCK. Touch some wood next time.");
+}
+
+# Get the user's cap
+$out = trim(stream_get_contents($pipes[1]));
+fclose($pipes[1]);
+
+# Get any error messages
+$errors = stream_get_contents($pipes[2]);
+fclose($pipes[2]);
+
+$return_value = proc_close($process);
+if ($return_value != 0) {
+   exit("<pre>" . $errors . "</pre>"); // FIXME this shows stacktraces
+}
+
+print "<table>";
+$lines = preg_split("/[\r\n]/", $out);
+foreach( $lines as $l ) {
+    if (!$l) continue;
+    print "<tr><td>".$l."</td></tr>\n";
+}
+print "</table>";
+
+?>

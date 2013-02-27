@@ -1,0 +1,126 @@
+##################################################################
+SEARCH - README/SETUP
+##################################################################
+
+0) General architecture notes
+------------------------------------------------------------------
+
+This search implementation is provided as a third-party 
+application that does indexing and search over your IFS data. It has
+to be authorized in the same way as any other web app that uses your
+IFS data. The APIs it exposes can be used by other applications
+to build, store and search indices on your behalf. One way to
+accomplish this is to create a subuser and pass the userid and USER
+cap to the service, it can then login to the capability
+server with (userid, sub USER cap). For now, search and indexing
+exploits the fact that it lives on the same host as the capability
+web server and "assumes" the already active session, if one exists.
+
+
+Encryption: Indexing is done on the server side so the server has
+to be trusted in this model. If you don't want to trust a service
+provider, you can run search and indexing on localhost.
+
+Disclaimer: This has a very web application oriented view of search.
+The bulk of the indexing and search logic could easily be pulled 
+out of the HttpServlet classes, but for now they are one. 
+
+1) Setting up the stack
+------------------------------------------------------------------
+
+You'll need:
+* Apache2
+* Tomcat6
+* recent JDK and JRE. (Open or Sun)
+* Ant (build tool)
+
+This README doesn't cover setting up the capability server under
+Apache, see /ifs-devel/webproxy/webcfg scripts for that, but it
+is a prerequisite.
+
+Once you have a working capability server and Tomcat and Ant installed,
+it should be smooth sailing. You can run Tomcat on whatever port you want,
+but take note if it. The default is 8080.
+
+Next, make Ant friends with Tomcat:
+cp /usr/share/tomcat6/lib/catalina-ant.jar /usr/share/ant/lib/catalina-ant.jar
+
+Then, install the Tomcat Manager application. This is a set 
+of servlets that let you deploy, update and remove application 
+contexts remotely, in our case from an ant build script.
+
+2) Configuration
+------------------------------------------------------------------  
+
+Open up Tomcat's users file, usually /var/lib/tomcat6/conf/tomcat-users.xml
+and add a user with the "manager" role:
+
+<role rolename="manager" />
+<user username="me" password="fahjah" roles="manager" />
+
+Open up /ifs-devel/webproxy/static/management/search/build.properties
+Set manager.* properties to appropriate things. The Manager app
+is at http://localhost:8080/manager by default.
+
+Open up /ifs-devel/webproxy/static/management/search/web/WEB-INF/web.xml
+Set the index_base_path parameter to where you want the directory
+structure of indices to be built (this needs to be writable by Tomcat.)
+
+Open your Apache virtual host configuration file. This will be in
+/etc/apache2/sites-enabled (or wherever you put it when you were 
+setting up Apache.) Add the following directives:
+
+ProxyPass /lsd http://localhost:8080/ifs
+ProxyPassReverse /lsd http://localhost:8080/ifs
+
+(NOTE: you can make the base path whatever you want, 
+I used /lsd/ here--Lucene in the Sky with Diamonds. (Credit: JS)
+    
+Now, if you're running Apache on port 80, your Tomcat servlets
+are accessed through http://localhost/lsd/index and http://localhost/lsd/search
+
+
+3) Build/Deploy
+------------------------------------------------------------------
+
+cd ifs-devel/webproxy/static/management/search
+ant compile
+ant install
+
+This mounts the search and index servlets at (by default)
+http://localhost:8080/ifs/index and 
+httP://localhost:8080/ifs/search
+(Though we access them through Apache in this setup.)
+
+Source files of interest are:
+search/src/org/ifs/net/{IndexServlet.java, SearchServlet.java}
+
+4) The REST API
+------------------------------------------------------------------
+
+These interfaces are changing too fast to document right now, it's
+probably best to have a look at the two files mentioned above.
+The search service takes a single GET paramter "q" (for historical reasons ;)
+which should be a plain text query, optionally using Lucene query syntax.
+
+The index service is more complicated. At the time of writing it takes
+a POST paramter named "root" which should be a LIST capability. Each 
+entry in the list will be indexed by its raw content and meta data, if
+there is any. It attempts to guess data types for meta fields and index
+them as strongly typed fields to support range queries and other fancery. 
+Meta fields can be searched using Lucene field syntax, i.e "field-name: query"
+If there is no field specified in a query, the blob contents will be used. Any
+entries which are lists themselves will be indexed recursively. 
+
+The index roughly maps terms onto capabilities, so search results (or hits)
+are capabilities for the objects. (If a pointer was resolved to a blob, 
+the pointer capability will be stored in the index, not the blob capability.)
+
+5) Coming soon
+-----------------------------------------------------------------      
+
+* Search across multiple indices
+* Document format specification/schema mapping 
+* JavaDocs for org.ifs.*
+* Blinking LEDs
+

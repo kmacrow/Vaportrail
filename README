@@ -1,0 +1,23 @@
+////////////////////////////////////////////////////////////////////////////////
+ _       __    ___   ___   ___  _____  ___    __    _   _    
+\ \  /  / /\  | |_) / / \ | |_)  | |  | |_)  / /\  | | | |   
+ \_\/  /_/--\ |_|   \_\_/ |_| \  |_|  |_| \ /_/--\ |_| |_|__ 
+ 
+////////////////////////////////////////////////////////////////////////////////
+ 
+Welcome to Vaportrail.
+
+
+Vaportrail is an app that pulls and syncs your data from services like Facebook,
+Flickr and Twitter with your IFS account. It provides a timeline visualization 
+with powerful search features that help you see the content you generate in 
+new ways.
+
+Vaportrail is licensed under the GNU GLP v3. It is a Networks, Systems and
+Security Lab project in the Department of Computer Science at the University
+of British Columbia.
+
+Details
+===============
+
+This is a developer release, it is not stable.   

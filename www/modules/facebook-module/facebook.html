@@ -1,0 +1,68 @@
+
+<!--
+
+Application name	IFS Management Console
+App URL	http://collins.cs.ubc.ca:8080/
+Application ID	118814521536841
+App secret	8de54142f4b8ac9c12429d14b3b3090c
+
+scope=user_notes,user_photos,user_status,user_videos,read_mailbox
+-->
+
+<div id="fb_login_prompt" style="display:none;width:400px;margin:0 auto;margin-top:50px;margin-bottom:50px" >
+	<input type="image" src="images/facebook-connect.png" align="absmiddle" onclick="FBM.DoLogin()" /> &nbsp;<span style="color:#3B5998">Import your Facebook&trade; account.</span>
+</div>
+
+<div id="fb_import_prompt" style="display:none;width:400px;margin:0 auto;margin-top:50px;margin-bottom:50px;">
+	<table width="100%">
+		<tr>
+		<td><img id="fbpic-1" src="" style="width:50px;box-shadow:0 0 5px #888" /></td>
+		<td style="color:#3B5998">
+			<b>Hi there, </b><span id="fbname-1" style="font-weight:bold"></span>.<br />
+			Click to import your Facebook&trade; data.
+		</td>
+		<td valign="middle">
+			<input type="button" value=" Import &raquo; " onclick="FBM.DoImport()" />
+		</td></tr>
+		<tr>
+			<td colspan="3">
+				<br />
+				<small style="color:#888"><b>Note: </b>This tool will import your status updates, notes, photos, videos, messages, comments and wall posts.</small>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div id="fb_importing" style="display:none;width:350px;margin:0 auto;margin-top:50px;margin-bottom:50px">
+	<table width="100%">
+		<tr><td valign="top">
+			<img src="images/facebook-spinner.gif" id="fb_importing_spin" />
+		</td><td> 
+			<span style="color:#3B5998">Just a moment while your account is loaded...</span><br />
+			&nbsp;<small id="fb_importing_status" style="color:#888">Loading friends list</small>
+		</td></tr>
+	</table>
+</div>
+
+<div id="fb_import_complete" style="display:none;text-align:center;margin:0 auto;margin-top:50px;margin-bottom:50px">
+
+	<img id="fbpic-2" src="" style="width:50px;box-shadow:0 0 5px #888" align="absmiddle" />&nbsp;&nbsp;
+	<span style="color:#3B5998"><b>Congratulations, </b></span><span id="fbname-2" style="color:#3B5998;font-weight:bold"></span><span style="color:#3B5998"><b>!</b> Your Facebook&trade; data has been capacitated.</span>
+	&nbsp; <input type="button" value=" Continue &raquo; " onclick="FBM.DoTimeline()" />
+		
+</div>
+
+
+<div id="fb_loading_spin" style="display:none;text-align:center;width:80%;margin:50px auto">
+		<img src="images/facebook-spinner.gif" />&nbsp;<small id="fb_importing_status" style="color:#888">Loading <b>your</b> Facebook&trade; data...</small>
+</div>
+<div id="fb_visual" style="display:none;margin-top:50px">
+	
+	<div id="fb_timeline" style="border: 1px solid #aaa;border-radius: 8px;width:80%;margin:0 auto;height:300px;box-shadow:0 0 5px #aaa">
+	
+	</div>
+	
+</div>
+
+
+

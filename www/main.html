@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vaportrail | Welcome</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/vaportrail.css" />	
+	
+	<!-- TODO We need to separate styles that apply on the vaportrail
+	     main window from what applies on the timeline app window. -->
+	<link rel="stylesheet" type="text/css" href="modules/apps/timeline/styles.css" />
+	
+	<!-- dependencies -->
+	<script type="text/javascript" src="/js/deployJava.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript">
+		/* funky config for Timeline api */
+		Timeline_ajax_url="js/timeline_ajax/simile-ajax-api.js";
+ 		Timeline_urlPrefix='js/timeline_js/';       
+        Timeline_parameters='bundle=true';
+        	
+        /* google data api loader */
+        google.load("gdata", "1");
+	</script>
+	<script type="text/javascript" src="https://connect.facebook.net/en_US/all.js"></script>
+	<!-- Timeline Widget -->
+	<script type="text/javascript" src="js/timeline_js/timeline-api.js"></script>
+	<!-- jQuery -->
+	<script type="text/javascript" src="jquery/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="jquery/jquery.mousewheel.js"></script>
+	<!-- IFS GWT API -->
+	<script type="text/javascript" src="ifsjs/ext-js/util.js"></script>
+	<script type="text/javascript" src="ifsjs/ifsjs.nocache.js"></script>
+	<!-- Stanford JS Crypto Lib -->
+	<script type="text/javascript" src="sjcl/sjcl.js"></script>
+	<!-- Client Side Search API -->
+	<script type="text/javascript" src="client-search/demo/search.js"></script>
+	<!-- Misc -->
+	<!--<script type="text/javascript" src="js/label-in-fields.js"></script>-->
+	<script type="text/javascript" src="js/MD5.js"></script>
+	<script type="text/javascript" src="js/Template.js"></script>
+	<script type="text/javascript" src="js/Cookie.js"></script>
+	<script type="text/javascript" src="js/Query.js"></script>
+	<!--<script type="text/javascript" src="js/portal.js"></script>-->
+	<!-- /dependencies -->
+
+	
+	<!-- New vaportrail utils -->
+	<script type="text/javascript" src="js/vaportrail.util.js"></script>
+	<script type="text/javascript" src="js/vaportrail.feedback.js"></script>
+	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+	
+	<!-- Legacy timeline code -->
+	<script type="text/javascript" src="modules/timeline.js"></script>
+	<script type="text/javascript" src="modules/timeline.ui.js"></script>
+	<script type="text/javascript" src="modules/timeline.data.js"></script>
+	
+	
+	<script type="text/javascript">
+		/* Timeline app bootstrapping */
+		var load_barrier = 4
+		
+		function main(){
+			TL.Install()
+		}
+		
+		function lower_barrier(){
+			if(--load_barrier == 0) main()
+		}
+		
+		function ifsOnLoad(){
+			lower_barrier()
+		}
+		
+		function searchOnLoad(){
+			lower_barrier()
+		}
+		
+		function windowOnLoad(){
+		     lower_barrier()
+		}
+		
+		// check that user is logged in
+		if(!vpt_session()){
+	        	location.href = "/"	
+		}else{
+		
+		    var jres = deployJava.getJREs()
+		    if(!jres.length){
+		        location.href = '/compat/';
+		    }
+		
+		    $(document).ready(lower_barrier)
+		    $(window).resize(TL.UI.WindowResize)
+		    window.onload = windowOnLoad
+		    search.onready = searchOnLoad
+		    
+	    }
+        </script>
+	<!-- /timeline app -->
+
+	<!-- TODO -- isolate these untrusted modules from the core application -->
+	<script type="text/javascript" src="modules/harvesters/0-gcal-service.js"></script>
+	<script type="text/javascript" src="modules/harvesters/1-facebook-service.js"></script>
+	<script type="text/javascript" src="modules/harvesters/2-flickr-service.js"></script>
+	<script type="text/javascript" src="modules/harvesters/3-twitter-service.js"></script>
+	<script type="text/javascript" src="modules/harvesters/4-gmail-service.js"></script>
+
+	<!-- TODO -- Registration of Vaportrail Apps -->
+	<script type="text/javascript" src="modules/apps/timeline/main.js"></script>
+
+</head>
+<body>
+
+
+
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="brand" href="#">Vaportrail</a>
+			<div class="nav-collapse">
+				<ul class="nav">
+					<li><a href="/about">About</a></li>
+					<li><a href="#feedback_modal" data-toggle="modal">Feedback</a></li>
+					<li><a href="/compat">Help</a></li>
+				</ul>
+				<ul class="nav pull-right">
+				    <li>
+				        <p class="navbar-text" style="cursor:default">
+				            <img id="profile_pic" align="absmiddle" style="height:32px;width:32px" 
+				                rel="tooltip" data-placement="bottom" title="" />&nbsp;&nbsp;
+				                
+				            <!--<img id="connected_icon" src="images/graph-connected.png" align="absmiddle" />-->
+					        <span id="connected_msg" rel="tooltip"  
+						        data-offsety="10"
+						        title="Vaportrail is connected to your personal storage provider" 
+						        data-placement="bottom"></span>
+				        </p>
+				    </li>
+				    <li class="divider-vertical"></li>
+				    <li>
+				        <p class="navbar-text">
+				            <input type="image" id="logout_icon" src="images/system-log-out.png" rel="tooltip"
+				         
+				                title="Logout" 
+				                data-placement="bottom" 
+				                data-offsety="5"
+				                onclick="TL.Logout()" />
+				        </p>
+				    </li>
+				    <li>
+				        <p class="navbar-text">
+				            &nbsp;&nbsp;<input type="image" id="settings_icon" src="images/settings-gear.png" rel="tooltip" 
+				                title="Manage your Vaportrail Modules" 
+				                data-placement="bottom" 
+				                data-offsety="5"
+				                onclick="$('#settings_modal').modal('show');TL.UI.AddModules()" />
+				        </p>
+				    </li>
+				</ul>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<div id="tl_pane_scroll_up" onclick="TL.UI.StreamScroll(1)">▲</div>
+<div id="tl_pane_scroll_down" onclick="TL.UI.StreamScroll(0)">▼</div>
+<div id="suggest_box" style="display:none"></div>
+<div id="importservice_window" class="notification-bubble">
+    <img src="images/pixel.gif" id="importservice_logo" align="absmiddle" />
+    <span class="notification-bubble-title" id="importservice_title"></span>
+    <div class="notification-bubble-text" id="importservice_msg">Just a moment we index your data...</div>
+    <div class="x-progress" id="importservice_progress">
+           <div class="x-bar" style="width:0%"></div>
+    </div>
+</div>
+
+<span id="tl_app_label"></span>
+<div id="shade" style="margin-top:40px">
+	<div id="header" style="width:100%;">
+		<div align="center"><br /><br />
+			<h1></h1><br /><br />
+			<input type="text" id="tl_search" maxlength="30" placeholder="Search..." onkeydown="TL.UI.SearchKeyPress()" onblur="TL.UI.SearchFocusBlur()" />
+			<img id="tl_search_icon" src="images/search-icon.png" style="position:relative;left:-40px;top:5px;cursor:pointer" onclick="TL.UI.SearchTrigger()" />
+			<img id="tl_search_spinner" style="margin-left:10px;display:none" src="images/timeline-search-spinner.gif" />	
+		</div>
+	</div>
+</div>
+
+<!--
+<div id="tl_sync_switch" style="display:none">
+	&nbsp;<img id="tl_sync_switch_icon" src="images/sync_on.png" style="position:relative;top:-2px" align="absmiddle" />
+	<a id="tl_sync_switch_msg" href="javascript:TL.UI.ToggleLiveSync()" style="text-decoration:none">Turn off LiveSync</a>
+	&nbsp;&nbsp;
+	<img src="images/delete_data.png" style="position:relative;top:-2px" align="absmiddle" />
+	<a href="javascript:TL.UI.DeleteUserData()" style="text-decoration:none">Delete my data</a>
+</div>
+-->
+<div id="tl_no_services" align="center" style="display:none;margin-top:200px">
+	<!--<h1 class="window-title" style="text-shadow: #009BDE 0px 0px 60px">Add services to backup and search your data.</h1>-->
+	<br />
+	<h1>Ready to discover your exhaust data?</h1>
+	<br /><br />
+	<div class="btn btn-primary btn-large" onclick="$('#settings_modal').modal('show');TL.UI.AddModules()" style="box-shadow:0 0 10px #ccc">Let's get started &raquo;</div>
+	<!--<img src="/about/info-graphic-1.png" />-->
+	
+</div>
+<div id="tl_visual" style="display:none;position:absolute;top:200px;width:100%;box-shadow:0 10px 10px #eee">
+
+   
+    <ul class="nav nav-pills" style="width:100px;margin:0 auto 10px;">
+        <!--<li><a href="#dashboard" data-toggle="tab">Dashboard</a></li>-->
+        <li class="active"><a href="#timeline" data-toggle="tab">Timeline</a></li>
+        <!--<li><a href="#plugins" data-toggle="tab">Plugins</a></li>-->
+    </ul>
+    
+    <div class="tab-content">
+        <!--<div class="tab-pane" id="dashboard">Hello dashboard!</div>-->
+        <!--<div class="tab-pane" id="plugins">Hello plugins!</div>-->
+        <div class="tab-pane active" id="timeline">
+            <table width="100%" cellspacing="0" cellpadding="0">
+		        <tr>
+			        <td width="80%">
+				        <div id="tl_timeline" style="border: 1px solid #ddd;cursor:pointer;cursor:hand;height:540px"></div>
+			
+			        </td>
+			        <td valign="top" width="20%">
+				        <div id="tl_pane" style="height:540px">
+				            <!--
+					        <div class="pane-header">
+						        <table cellpadding="0" cellspacing="0" width="99%">
+						        <tr>
+							        <td> <span id="stream_title" class="brand">&nbsp;</span></td>
+							        <td align="right"> <a href="javascript:TL.UI.SearchRevertToStream()" id="stream_link">&laquo; Back to Stream</a> </td>
+						        </tr>
+						        </table>
+					        </div>
+					        -->
+					        <div id="tl_pane_inner" style="height:94%;">
+						        <div id="tl_pane_scroll" style="position:relative;top:0">
+							
+						        </div>
+					        </div>
+				        </div>
+			        </td>
+		        </tr>
+	        </table>
+        </div><!-- /tab -->
+    
+    </div><!-- /tabs -->
+   
+</div>
+<div id="tl_sync" style="display:none"></div>
+
+
+<div id="branding">
+	<div class="container">
+		<div class="row">
+			<div class="offset1">
+				<table>
+					<tr>
+					<td valign="middle">						
+						<img id="ubc_brand" src="images/ubcgrey_basic.png" />
+					</td>
+					<td valign="middle">
+						<a href="http://www.cs.ubc.ca/labs/nss/">NSS Lab</a><br />
+						The University of British Columbia	
+					</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="footer">
+	<div id="footer1">
+		<div id="container">
+		
+		</div>
+	</div>
+	<div id="footer2">
+		<div id="container">
+		
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="feedback_modal">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>Send Feedback</h3>
+	</div>
+	<div class="alert alert-success" id="feedback_alert" style="display:none">
+			<strong>Thanks!</strong> We appreciate you taking the time to share your thoughts.
+	</div>
+	<div class="modal-body" align="center">
+		We'd love to hear about your experience with <span class="brand">Vaportrail</span>!
+		<br /><br />
+		<form>
+			<input type="text" id="feedback_email" placeholder="me@example.com (Optional)" /><br />
+			<div class="control-group" id="feedback_form">
+			<textarea id="feedback_text"></textarea>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#" id="feedback_btn" class="btn btn-primary" data-loading-text="Submit" onclick="send_feedback()">Submit</a>
+		<a href="#" data-dismiss="modal" class="btn">Cancel</a>
+		
+	</div>
+</div>
+
+
+<div class="modal fade" id="settings_modal">
+    <div class="modal-body">
+        <ul class="nav nav-pills">
+            <li class="active"><a href="#settings_sources" data-toggle="tab">Data Sources</a></li>
+            <!--
+	        <li><a href="#settings_prefs" data-toggle="tab">Preferences</a></li>
+		<li><a href="#settings_account" data-toggle="tab">Account</a></li>
+	    -->
+	    <li><a href="#settings_apps" data-toggle="tab">Apps</a></li>
+        </ul>
+    
+        <div class="tab-content">
+            <div class="tab-pane active" id="settings_sources"></div>
+	    <!--
+	      <div class="tab-pane" id="settings_prefs">Preferences</div>
+              <div class="tab-pane" id="settings_account">Account stuff</div>
+	    -->
+	    <div class="tab-pane" id="settings_apps"></div>
+        </div>
+
+        <div class="modal-footer">
+            <a href="#" data-dismiss="modal" class="btn" onclick="TL.UI.AddModulesClose()">Finished</a>
+        </div>
+        
+    </div>
+</div>
+
+<div class="modal fade" id="gmail_modal">
+    <div class="modal-header">
+        <h3>Sign in to Gmail</h3>
+    </div>
+    <div class="modal-body">
+        <center>
+        <img src="images/gmail-logo.png" style="width:64px" />
+        <table>
+            <tr>
+                <td>
+                     <input type="text" placeholder="me@gmail.com" id="gmail_username" /><br />
+                     <input type="password" placeholder="Password" id="gmail_password" /> 
+                </td>
+            </tr>
+        </table>
+        </center>
+    </div>    
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" onclick="GmailService.UI.Login()">Login</a>
+        <a href="#" data-dismiss="modal" class="btn" onclick="GmailService.UI.CancelLogin()">Cancel</a>
+    </div>
+    <div class="modal-footer">
+        <small><b>Disclaimer:</b> This feature is experimental and should not be used if your inbox contains sensitive information.</small>
+    </div>
+</div>
+
+<div class="window">
+	<div class="window-outer">
+		<div class="window-inner">
+			
+			<!--<h1 class="window-title">Import</h1>-->
+			<!--
+			<img src="images/timeline-spinner.gif" align="absmiddle" />&nbsp;
+			<span class="window-caption">Just a moment while your data is imported</span>
+			
+			<br /><br />
+			
+			<div align="center">
+				<img id="importservice_logo" src="" height="30" style="height:45px" />
+			</div>
+			<br />
+			
+			<div align="center">
+				<img id="importservice_logo" src="" style="height:45px" />
+		    </div>
+		    
+            <div id="importservice_progress">
+                <span class="msg" style="display:none"></span>
+                <div class="progress" style="width:250px;height:20px">
+                    <div class="bar" style="width:0%"></div>
+                </div>
+            </div>
+			-->	        
+		
+		
+		</div>
+	</div>
+</div>
+
+<div id="deletedata_window" class="window">
+	<div class="window-outer">
+		<div class="window-inner">
+			<br />
+			<b>Are you sure you want to delete all of your data?</b>
+			This action is irreversible. 
+			<br /><br /><br />	
+			<div align="center">
+				<div class="btn" onclick="javascript:TL.UI.HideWindow('deletedata_window')">Cancel</div>
+				&nbsp;&nbsp;
+				<div class="btn btn-danger" onclick="TL.UI.DeleteUserData(true)">Delete my data</div> 
+			</div>
+			<br />
+		</div>
+	</div>
+</div>
+
+<div id="tl_status">
+	
+</div>
+<div id="fb-root"></div>
+<img src="images/pixel.gif" /> <!-- for google api -->
+<div id="overlay" class="overlay"></div>
+
+<!-- Client-side search and indexing plugin -->
+<applet id="SearchApplet" code="org.ubc.nss.SearchApplet.class" 
+		archive="client-search/demo/SearchApplet-11.jar" width="1" height="1" style="visibility:hidden" MAYSCRIPT="true">
+		<param name="mayscript" value="true" /> 
+		<param name="scriptable" value="true" /> 
+		<param name="start_callback" value="search_start_callback">
+</applet>
+
+
+
+
+</body>
+</html>
+
+
+
+

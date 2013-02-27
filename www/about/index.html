@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Vaportrail: About the app </title>
+		
+		<script type="text/javascript" src="../jquery/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="../js/vaportrail.util.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/vaportrail.css" />
+		<!--<link href='https://fonts.googleapis.com/css?family=Nunito:700' rel='stylesheet' type='text/css'>-->
+		
+		<script type="text/javascript">
+			$(document).ready(function(){
+				if(vpt_is_notebook()){
+					small_display();
+				}
+			})
+		</script>
+		
+		<style type="text/css">
+		
+		
+			.span45{
+				float: left;
+				margin-left: 30px;
+				width: 420px;
+			}
+		
+			
+			.justify{
+				text-align: justify;
+				text-justify: newspaper;
+				line-height: 20px;
+			}
+			
+			.grey{
+				color: #555;
+			}
+			
+		</style>
+		
+	</head>
+	
+	<body>
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="/" style="padding-left:28px">Vaportrail</a>
+					<div class="nav-collapse">
+						<ul class="nav">
+							<li class="active"><a href="/about">About</a></li>
+							<li><a href="/compat">Help</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		<div class="container copy-container">
+			<div class="row">
+				<div class="span9 offset1">
+					<h1>Welcome to <span class="brand">Vaportrail</span></h1>
+				
+					<br />
+					<span class="big">
+					Vaportrail helps you search and visualize your exhaust data from services like Facebook, Twitter and Google Calendar.  
+					</span>
+					<br /><br />
+					<div class="row">
+						<div class="span3">
+							<p class="grey">
+								<i class="icon-folder-open"></i>&nbsp;<strong>Import your exhaust data.</strong>
+								It's quick and easy to import your posts, tweets and mail from the services
+								you use everyday.
+								
+				
+							</p>
+						</div>
+						<div class="span3">
+							<p class="grey">
+								<i class="icon-search"></i>&nbsp;<strong>Search everything.</strong>
+								Search across a combined index of your exhaust data with a powerful
+								timeline interface.
+								
+							</p>
+						</div>
+						<div class="span3">
+							<p class="grey">
+								<i class="icon-leaf"></i>&nbsp;<strong>Discover fun correlations.</strong>
+								The timeline helps you discover fun and interesting trends and
+								correlations in your exhaust data.
+								
+							</p>
+						</div>
+					</div>
+					<br />
+					<div class="rule"></div>
+
+					
+					<div class="row" align="center">
+					    <div class="span9">
+					    <br />
+					    <img src="../images/vpt-new.png" style="width:870px;border-radius:3px;box-shadow:0 0 10px #ccc" />
+					    
+					    </div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="span45">
+							<h3>Background</h3>
+							<br />
+							<p class="justify">
+								<b>The motivation for building Vaportrail is simple:</b> the implicit ownership of user generated content
+								by web software services (e.g. Facebook, Twitter and Gmail) amounts to a forfeit of your right to
+								freely access and control the dissemination of that information. This model needs to be more transparent
+								and Vaportrail demonstrates how it can be.
+								 
+								 
+							</p>
+							<p class="justify">
+								<b>The value of user generated content is enormous.</b> <u>S</u>oftware <u>a</u>s <u>a</u> <u>S</u>ervice (Saas)
+								providers extract business intelligence of immense value from the user generated content they collect through their
+								products and services. The precise semantics of this "trade" are not clear to the average user.      
+							</p>
+						</div>
+						<div class="span45">
+							<h3>&nbsp;</h3><br />
+							<p class="justify">
+								<b>Vaportrail suggests a new sharing model</b> in which the application does not store your content centrally, 
+								but instead delegates the responsibility of storage to a third-party provider. The storage provider may be owned
+								and hosted by you or by an organization you trust. This explicitly returns ownership of the authoritative
+								copies of your content to you and ensures that your access to the data is not contingent on the application's policies,
+								features, or availability.   
+							</p>   
+							<p class="justify">
+								<b>Client-side encryption, indexing and search</b> means Vaportrail does not process your data on a central server.
+								It is implemented in software that runs almost entirely on your computer,
+								within your browser.
+								
+							</p>  
+						</div>
+					</div>
+					<div class="row">
+						<div class="span9" align="center">
+						    <br /><br />
+							<img src="info-graphic-1.png" />
+							<br /><br />&nbsp;
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		
+		
+		<div id="branding_flow">
+			<div class="container">
+				<div class="row">
+					<div class="offset1">
+						<table>
+							<tr>
+							<td valign="middle">						
+								<img id="ubc_brand" src="../images/ubcgrey_basic.png" />
+							</td>
+							<td valign="middle">
+								<a href="http://www.cs.ubc.ca/labs/nss/">NSS Lab</a><br />
+								The University of British Columbia	
+							</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="footer_flow">
+			<div id="footer1">
+				<div id="container">
+				
+				</div>
+			</div>
+			<div id="footer2">
+				<div id="container">
+				
+				</div>
+			</div>
+		</div>
+	
+		<script src="../bootstrap/js/bootstrap.min.js"></script>
+	
+	</body>
+</html>

@@ -1,0 +1,16 @@
+Client Side Search & Indexing Setup
+================================================================================
+
+Prereqs:
+You'll need sun's latest java sdk and the ant build tool installed.
+It might work with the open sdk but it's untested.
+
+To Build:
+Just type make. If everything works you'll have the applet jar in ./build,
+if not, you'll have cryptic error messages from ant.
+
+There is a pre-built binary in ./demo
+
+Code of interest is in src/org/ubc/nss
+
+

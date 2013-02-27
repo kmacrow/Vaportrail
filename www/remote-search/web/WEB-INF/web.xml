@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+	<display-name>IFS / Search</display-name>
+	<description>
+		This is version 1.0.0 of IFS / Search, an indexing
+		and search facility for data stored in IFS.
+	</description>
+
+	<context-param>
+      		<param-name>capsrv_session_cookie</param-name>
+      		<param-value>capsess</param-value>
+      		<description>
+        		The name of the capserver session cookie.
+      		</description>
+    	</context-param>
+
+	<context-param>
+      		<param-name>capsrv_mount_point</param-name>
+      		<param-value>/capsrv/</param-value>
+      		<description>
+        		Mount point of the capserver.
+      		</description>
+    	</context-param>
+    	
+    	<context-param>
+      		<param-name>index_base_path</param-name>
+      		<param-value>/home/kalan/ifs-index</param-value>
+      		<description>
+        		Absolute path to where search indices will be built.
+        		(No trailing slash.)
+      		</description>
+    	</context-param>
+
+	<servlet>
+		<servlet-name>index</servlet-name>
+		<servlet-class>org.ifs.net.IndexServlet</servlet-class>
+		<description>
+		This servlet accepts indexing requests and builds indices
+		by "crawling" data stored in IFS.
+		</description>
+		<load-on-startup>5</load-on-startup>
+	</servlet>    
+	
+	<servlet>
+		<servlet-name>search</servlet-name>
+		<servlet-class>org.ifs.net.SearchServlet</servlet-class>
+		<description>
+		This servlet accepts query requests and runs them against
+		the indices built by the index servlet.
+		</description>
+		<load-on-startup>5</load-on-startup>
+	</servlet> 
+	
+	<servlet-mapping>
+		<servlet-name>index</servlet-name>
+		<url-pattern>/index</url-pattern>
+	</servlet-mapping>   
+
+	<servlet-mapping>
+		<servlet-name>search</servlet-name>
+		<url-pattern>/search</url-pattern>
+	</servlet-mapping>
+
+
+	<session-config>
+		<session-timeout>30</session-timeout> 
+	</session-config>
+
+
+</web-app>
